@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 페이지</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+        .navbar {
+            background-color: black;
+        }
+        .navbar-nav .nav-link {
+            color: white;
+            font-size: 18px;
+        }
+        .navbar-nav {
+            margin-top: 15px;
+            margin-right: 15px;
+            height: 50px;
+        }
+        .navbar-nav img {
+            width: 45px;
+            height: auto;
+            margin-top: -23px;
+        }
+        img {
+            width: 500px;
+            height: 500px;
+            margin-left: 18%;
+        }
+        @keyframes moveLeftToRight {
+            0% { transform: translateX(-140%) ;}
+            50% { transform: translateX(100%) ;}
+            100% { transform: translateX(calc(100% + 100vw)); }
+        }
+        .animated-text {
+            display: inline-block;
+            white-space: nowrap;
+            overflow: hidden;
+            animation: moveLeftToRight 15s linear infinite;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .table-header {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 10%;
+            margin-bottom: 3%;
+        }
+        .table-bordered {
+            border: 1px solid #dee2e6;
+        }
+        thead {
+            background-color: black;
+            color: #FFFFFF;
+        }
+        th {
+            text-align: center;
+        }
+        td {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-sm">
+        <div class="collapse navbar-collapse justify-content-between">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{ url_for('hello') }}">
+                        <img src="{{ url_for('static', filename='images/ADOSI_black_mini.png') }}"
+                            alt="ADOSI_black"></a>
+                </li>
+            </ul>
+            {% if userid %}
+            <ul class="navbar-nav">
+                <li class="nav-link">
+                    <a> {{ userid }} 님 </a>
+                <li class="nav-link"> <a> &#183 </a> </li>
+                {% if userid == "admin" %}
+                <li class="nav-item"> <a class="nav-link" href="{{ url_for('admin') }}"> 관리자 페이지 </a> </li>
+                <li class="nav-link"> <a> &#183 </a> </li>
+                {% endif %}
+                </li>
+                <li class="nav-item"> <a class="nav-link" href="{{ url_for('logout') }}"> 로그아웃 </a> </li>
+            </ul>
+
+            {% elif userid == None %}
+            <ul class="navbar-nav">
+                <li class="nav-item"> <a class="nav-link" href="{{ url_for('login') }}"> 로그인 </a> </li>
+                <li class="nav-link"> <a> &#183 </a> </li>
+                <li class="nav-item"> <a class="nav-link" href="{{ url_for('register') }}"> 회원가입 </a> </li>
+            </ul>
+            {% endif %}
+        </div>
+    </nav>
+
+    {% if ddos %}
+    <div class="alert alert-danger text-center" role="alert">
+        <span class="animated-text">디도스 공격이 감지되었습니다. &nbsp서비스 이용이 제한될 수 있습니다.</span>
+    </div>
+    {% endif %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h1 class="text-center table-header"> User Login Log </h1>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>id</th>
+                            <th>userid</th>
+                            <th>ip_adress</th>
+                            <th>login_time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in user_data %}
+                        <tr>
+                            <td>{{ row[0] }} </td>
+                            <td>{{ row[1] }} </td>
+                            <td>{{ row[2] }} </td>
+                            <td>{{ row[3] }} </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-6">
+                <h1 class="text-center table-header"> Validation IP </h1>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>id</th>
+                            <th>validaton_ip</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in ip_data %}
+                        <tr>
+                            <td>{{ row[0] }} </td>
+                            <td>{{ row[1] }} </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <script type="text/javascript">
+        alert("{{ messages[-1] }}")
+    </script>
+    {% endif %}
+    {% endwith %}
+
+</body>
+
+</html>

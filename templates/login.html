@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>로그인</title>
+    <style>
+        .navbar {
+            background-color: black;
+        }
+        .navbar-nav .nav-link {
+            color: white;
+            font-size: 18px;
+        }
+        .navbar-nav {
+            margin-top: 15px;
+            margin-right: 15px;
+            height: 50px;
+        }
+        .navbar-nav img {
+            width: 45px;
+            height: auto;
+            margin-top: -23px;
+        }
+        .login-button {
+            text-align: center;
+        }
+        .form-group {
+            margin-left: 25%;
+            width: 50%;
+        }
+        .form-control {
+            height: 60px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm">
+        <div class="collapse navbar-collapse justify-content-between">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{ url_for('hello') }}"><img src="{{ url_for('static', filename='images/ADOSI_black_mini.png') }}" alt="ADOSI_black"></a>
+                </li>
+            </ul>
+            <ul class="navbar-nav">
+                <!-- <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('login') }}"> 로그인 </a>
+                </li> -->
+                <!-- <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('logout') }}"> 로그아웃 </a>
+                </li> -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('register') }}"> 회원가입 </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <script type="text/javascript">
+                alert("{{ messages[-1] }}")
+            </script>
+        {% endif %}
+    {% endwith %}
+
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col-12 text-center">
+                <h1> 로그인 </h1>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-12 text-center">
+                <form method="POST">
+                    {{ form.csrf_token }}
+                    <div class="form-group">
+                        <!-- {{ form.userid.label("아이디") }} -->
+                        {{ form.userid(class="form-control", placeholder="아이디") }}
+                    </div>
+
+                    <div class="form-group">
+                        <!-- {{ form.password.label("비밀번호") }} -->
+                        {% if form.password.errors %}
+                        {{ form.password.erroers.0 }}
+                        {% endif %}
+                        {{ form.password(class="form-control", placeholder="비밀번호") }}
+                    </div>
+
+                    <div class="login-button">
+                        <button type="submit" class="btn btn-primary"
+                        style="background-color: black; border: none; width: 560px; height: 65px; font-weight: bold; font-size: 20px;"> 로그인 </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

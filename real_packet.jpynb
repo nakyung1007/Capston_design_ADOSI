@@ -1,0 +1,30 @@
+import pandas as pd
+import numpy as np
+
+# 데이터 불러오기
+data = pd.read_csv('/Users/chonakyung/modelmodel/SYN.csv')
+
+# Z-점수를 계산하는 함수 정의
+def calculate_z_scores(df):
+    # 수치형 열 선택
+    numeric_cols = df.select_dtypes(include=[np.number]).columns
+    z_scores = df[numeric_cols].apply(lambda x: (x - x.mean()) / x.std())
+    return z_scores
+
+# Z-점수 계산
+z_scores = calculate_z_scores(data)
+
+# 이상치 임계값 설정
+threshold = 3
+
+# 이상치 플래그 추가
+data['is_anomaly'] = z_scores.abs().max(axis=1) > threshold
+
+# 플래그된 이상치 표시
+anomalies = data[data['is_anomaly']]
+import ace_tools as tools; tools.display_dataframe_to_user(name="플래그된 이상치", dataframe=anomalies)
+
+# 플래그된 이상치를 새로운 CSV 파일로 저장
+anomalies.to_csv('/mnt/data/flagged_anomalies.csv', index=False)
+
+print("이상치가 식별되어 'flagged_anomalies.csv' 파일로 저장되었습니다.")

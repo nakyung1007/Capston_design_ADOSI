@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        
+        <style>
+            .navbar {
+                background-color: black;
+            }
+            .navbar-nav .nav-link {
+                color: white;
+                font-size: 18px;
+            }
+            .navbar-nav {
+                margin-top: 15px;
+                margin-right: 15px;
+                height: 50px;
+            }
+            .navbar-nav img {
+                width: 45px;
+                height: auto;
+                margin-top: -23px;
+            }
+            img {
+                width: 500px;
+                height: 500px;
+                margin-left: 18%;
+            }
+            .caption {
+                position: absolute;
+                bottom: -10%;
+                left: 0;
+                width: 100%;
+                text-align: center;
+                font-size: 40px;
+                margin-left: 4%;
+            }
+        </style>
+        
+        <title>메인 화면</title>
+    </head>
+    
+    <body>
+        <nav class="navbar navbar-expand-sm">
+            <div class="collapse navbar-collapse justify-content-between">
+                <!-- 로고 -->
+                <ul class="navbar-nav">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{{ url_for('hello') }}">
+                            <img src="{{ url_for('static', filename='images/ADOSI_black_mini.png') }}" alt="ADOSI_black">
+                        </a>
+                    </li>
+                </ul>
+        
+                <!-- 사용자 인증 상태에 따른 메뉴 -->
+                {% if userid is defined and userid %}
+                <ul class="navbar-nav">
+                    <li class="nav-link">
+                        <a> {{ userid }} 님 </a>
+                    </li>
+                    <li class="nav-link"> <a> &#183 </a> </li>
+                    {% if userid == "admin" %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('admin') }}"> 관리자 페이지 </a>
+                    </li>
+                    <li class="nav-link"> <a> &#183 </a> </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('logout') }}"> 로그아웃 </a>
+                    </li>
+                </ul>
+                {% else %}
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('login') }}"> 로그인 </a>
+                    </li>
+                    <li class="nav-link"> <a> &#183 </a> </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('register') }}"> 회원가입 </a>
+                    </li>
+                </ul>
+                {% endif %}
+            </div>
+        </nav>
+            
+        <!-- 플래시 창 띄우기 -->
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <script type="text/javascript">
+                alert("{{ messages[-1] }}")
+            </script>
+        {% endif %}
+        {% endwith %}
+        
+        <!-- 메뉴 선택 -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="image-container">
+                    <a href="{{ url_for('map') }}">
+                        <img src="{{ url_for('static', filename='images/earth.png') }}" alt="지구">
+                    </a>
+                    <span class="caption">실시간 세계 지도</span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="image-container">
+                    <a href="{{ url_for('rsp_game') }}">
+                        <img src="{{ url_for('static', filename='images/rsp.jpeg') }}" alt="가위바위보">
+                    </a>
+                    <span class="caption">가위바위보 게임</span>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>

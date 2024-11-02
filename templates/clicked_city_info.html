@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clicked City Info</title>
+</head>
+
+<body>
+    <h1>Clicked City Info</h1>
+    <p>현재 사용자 위치: Latitude {{ client_latitude }}, Longitude {{ client_longitude }}</p>
+    <p>가장 가까운 도시: {{ closest_city }}</p>
+    {% if clicked_city_info %}
+    <p>사용자가 클릭한 도시: {{ clicked_city_info.clicked_city }}</p>
+    <!-- 여기에 더 많은 클릭한 도시 정보를 표시할 수 있음 -->
+    {% else %}
+    <p>사용자가 아직 클릭한 도시가 없습니다.</p>
+    {% endif %}
+
+        <h1>Database Contents</h1>
+        <table border="1">
+            <tr>
+                <th>ID</th>
+                <th>User ID</th>
+                <th>Client IP</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>Clicked City</th>
+                <th>Is_Closest</th>
+                <th>Clicked Time</th>
+            </tr>
+            {% for data in all_user_city_data %}
+            <tr>
+                <td>{{ data.id }}</td>
+                <td>{{ data.userid }}</td>
+                <td>{{ data.client_ip }}</td>
+                <td>{{ data.latitude }}</td>
+                <td>{{ data.longitude }}</td>
+                <td>{{ data.clicked_city }}</td>
+                <td>{{ data.is_closest }}</td>
+                <td>{{ data.clicked_time }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+</body>
+
+</html>
